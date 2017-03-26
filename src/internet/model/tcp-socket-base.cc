@@ -643,12 +643,29 @@ TcpSocketBase::SetInitialSSThresh (uint32_t threshold)
 
   m_tcb->m_initialSsThresh = threshold;
 }
-
+ 
 uint32_t
 TcpSocketBase::GetInitialSSThresh (void) const
 {
   return m_tcb->m_initialSsThresh;
 }
+
+void
+TcpSocketBase::SetMaxSSThresh (uint32_t max_threshold)
+{
+  NS_ABORT_MSG_UNLESS ( (m_state == CLOSED) || max_threshold == m_tcb->m_maxSsThresh,
+                        "TcpSocketBase::SetMaxSSThresh() cannot change max ssThresh after connection started.");
+
+  m_tcb->m_maxSsThresh = max_threshold;
+}
+
+uint32_t
+TcpSocketBase::GetMaxSSThresh (void) const
+{
+  return m_tcb->m_maxSsThresh;
+}
+
+  
 
 void
 TcpSocketBase::SetInitialCwnd (uint32_t cwnd)
@@ -658,7 +675,7 @@ TcpSocketBase::SetInitialCwnd (uint32_t cwnd)
 
   m_tcb->m_initialCWnd = cwnd;
 }
-
+  
 uint32_t
 TcpSocketBase::GetInitialCwnd (void) const
 {
