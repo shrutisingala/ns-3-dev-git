@@ -243,7 +243,6 @@ TcpSocketState::TcpSocketState (void)
     m_ssThresh (0),
     m_initialCWnd (0),
     m_initialSsThresh (0),
-    m_maxSsThresh (0),
     m_segmentSize (0),
     m_lastAckedSeq (0),
     m_congState (CA_OPEN),
@@ -261,7 +260,6 @@ TcpSocketState::TcpSocketState (const TcpSocketState &other)
     m_ssThresh (other.m_ssThresh),
     m_initialCWnd (other.m_initialCWnd),
     m_initialSsThresh (other.m_initialSsThresh),
-    m_maxSsThresh (other.m_maxSsThresh),
     m_segmentSize (other.m_segmentSize),
     m_lastAckedSeq (other.m_lastAckedSeq),
     m_congState (other.m_congState),
@@ -651,23 +649,6 @@ TcpSocketBase::GetInitialSSThresh (void) const
 {
   return m_tcb->m_initialSsThresh;
 }
-
-void
-TcpSocketBase::SetMaxSSThresh (uint32_t max_threshold)
-{
-  NS_ABORT_MSG_UNLESS ( (m_state == CLOSED) || max_threshold == m_tcb->m_maxSsThresh,
-                        "TcpSocketBase::SetMaxSSThresh() cannot change max ssThresh after connection started.");
-
-  m_tcb->m_maxSsThresh = max_threshold;
-}
-
-uint32_t
-TcpSocketBase::GetMaxSSThresh (void) const
-{
-  return m_tcb->m_maxSsThresh;
-}
-
-  
 
 void
 TcpSocketBase::SetInitialCwnd (uint32_t cwnd)
