@@ -232,7 +232,7 @@ TcpNewRenoLSS::GetTypeId (void)
 
 TcpNewRenoLSS::TcpNewRenoLSS ()
   : TcpNewReno (),
-  m_maxSsThresh (100)
+  m_maxSsThresh (100.0)
 {
   NS_LOG_FUNCTION (this);
 }
@@ -254,12 +254,15 @@ TcpNewRenoLSS::SlowStart (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
 {
   NS_LOG_FUNCTION (this << tcb << segmentsAcked);
 
+  NS_LOG_INFO ("maxSSThresh = " << m_maxSsThresh );
+
   if (segmentsAcked >= 1)
     {
       int k;
       k = (int)(tcb->m_cWnd/(double)(0.5*m_maxSsThresh*tcb->m_segmentSize));
+      NS_LOG_INFO ("k = " << k);
       tcb->m_cWnd += (int)(tcb->m_segmentSize/k);
-      NS_LOG_INFO ("In LimitedSlowStart, updated to cwnd " << tcb->m_cWnd << " ssthresh " << tcb->m_ssThresh);
+      NS_LOG_INFO ("In LimitedSlowStart, updated to cwnd " << (int)(tcb->m_cWnd/tcb->m_segmentSize) << " ssthresh " << (int)(tcb->m_ssThresh/tcb->m_segmentSize));
       return segmentsAcked - 1;
     }
 
@@ -271,18 +274,20 @@ TcpNewRenoLSS::IncreaseWindow (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
 {
   NS_LOG_FUNCTION (this << tcb << segmentsAcked);
 
-  if (tcb->m_cWnd <= m_maxSsThresh*tcb->m_segmentSize )
+  if (((tcb->m_cWnd <= m_maxSsThresh*tcb->m_segmentSize) && (tcb->m_cWnd < tcb->m_ssThresh))|| ((tcb->m_ssThresh < m_maxSsThresh*tcb->m_segmentSize)&& (tcb->m_cWnd <= m_maxSsThresh*tcb->m_segmentSize ) && (tcb->m_cWnd < tcb->m_ssThresh)))
     {
+      NS_LOG_INFO ("Entering Slow Start");
       segmentsAcked = TcpNewReno::SlowStart (tcb, segmentsAcked);
     }
-  if (m_maxSsThresh*tcb->m_segmentSize < tcb->m_cWnd && tcb->m_cWnd <= tcb->m_ssThresh)
+  else if (m_maxSsThresh*tcb->m_segmentSize < tcb->m_cWnd && tcb->m_cWnd < tcb->m_ssThresh)
     {
-      segmentsAcked = SlowStart (tcb, segmentsAcked);
+      NS_LOG_INFO ("Entering Limited Slow Start ");
+      segmentsAcked = TcpNewRenoLSS::SlowStart (tcb, segmentsAcked);
     }
 
   if (tcb->m_cWnd >= tcb->m_ssThresh)
     {
-      CongestionAvoidance (tcb, segmentsAcked);
+      TcpNewReno::CongestionAvoidance (tcb, segmentsAcked);
     }
 
   
@@ -299,8 +304,6 @@ TcpNewRenoLSS::GetName () const
 {
   return "TcpNewRenoLSS";
 }
-
-
   
 } // namespace ns3
 
