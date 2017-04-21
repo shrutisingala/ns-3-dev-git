@@ -203,7 +203,7 @@ TraceNextRx (std::string &next_rx_seq_file_name)
 
 int main (int argc, char *argv[])
 {
-  std::string transport_prot = "TcpWestwood";
+  std::string transport_prot = "LimitedStart";
   double error_p = 0.0;
   std::string bandwidth = "2Mbps";
   std::string delay = "0.01ms";
@@ -214,7 +214,7 @@ int main (int argc, char *argv[])
   double data_mbytes = 0;
   uint32_t mtu_bytes = 400;
   uint16_t num_flows = 1;
-  float duration = 100;
+  float duration = 30;
   uint32_t run = 0;
   bool flow_monitor = false;
   bool pcap = false;
@@ -223,7 +223,7 @@ int main (int argc, char *argv[])
 
 
   CommandLine cmd;
-  cmd.AddValue ("transport_prot", "Transport protocol to use: TcpNewReno, "
+  cmd.AddValue ("transport_prot", "Transport protocol to use: TcpNewReno, LimitedStart"
                 "TcpHybla, TcpHighSpeed, TcpHtcp, TcpVegas, TcpScalable, TcpVeno, "
                 "TcpBic, TcpYeah, TcpIllinois, TcpWestwood, TcpWestwoodPlus, TcpLedbat ", transport_prot);
   cmd.AddValue ("error_p", "Packet error rate", error_p);
@@ -277,6 +277,10 @@ int main (int argc, char *argv[])
   if (transport_prot.compare ("TcpNewReno") == 0)
     {
       Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (TcpNewReno::GetTypeId ()));
+    }
+  else if (transport_prot.compare ("LimitedStart") == 0)
+    {
+      Config::SetDefault ("ns3::TcpL4Protocol::SocketType", TypeIdValue (LimitedStart::GetTypeId ()));
     }
   else if (transport_prot.compare ("TcpHybla") == 0)
     {
@@ -429,6 +433,7 @@ int main (int argc, char *argv[])
       AddressValue remoteAddress (InetSocketAddress (sink_interfaces.GetAddress (i, 0), port));
 
       if (transport_prot.compare ("TcpNewReno") == 0
+          || transport_prot.compare ("LimitedStart") == 0
           || transport_prot.compare ("TcpWestwood") == 0
           || transport_prot.compare ("TcpWestwoodPlus") == 0
           || transport_prot.compare ("TcpHybla") == 0
@@ -490,18 +495,36 @@ int main (int argc, char *argv[])
     }
 
   // Flow monitor
-  FlowMonitorHelper flowHelper;
-  if (flow_monitor)
-    {
-      flowHelper.InstallAll ();
-    }
+  FlowMonitorHelper flowmon;
+  Ptr<FlowMonitor> monitor = flowmon.InstallAll();
 
   Simulator::Stop (Seconds (stop_time));
   Simulator::Run ();
 
+  monitor->CheckForLostPackets ();
+
+  Ptr<Ipv4FlowClassifier> classifier = DynamicCast<Ipv4FlowClassifier> (flowmon.GetClassifier ());
+  std::map<FlowId, FlowMonitor::FlowStats> stats = monitor->GetFlowStats ();
+  for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator i = stats.begin (); i != stats.end (); ++i)
+    {
+      Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow (i->first);
+
+      /*if (t.sourceAddress=="10.0.0.0" && t.destinationAddress == "255.255.255.0")
+      {*/
+         
+          std::cout << "Flow " << i->first-1  << " (" << t.sourceAddress << " -> " << t.destinationAddress << ")\n";
+          std::cout << "  Tx Bytes:   " << i->second.txBytes << "\n";
+          std::cout << "  Rx Bytes:   " << i->second.rxBytes << "\n";
+          std::cout << "Duration :"<<i->second.timeLastRxPacket.GetSeconds()-i->second.timeFirstTxPacket.GetSeconds();
+            std::cout << "Limited Slow Start Throughput: " << i->second.rxBytes * 8.0 / (i->second.timeLastRxPacket.GetSeconds() - i->second.timeFirstTxPacket.GetSeconds())/1024/1024  << " Mbps\n";
+    //  }
+     }
+  
+
+  
   if (flow_monitor)
     {
-      flowHelper.SerializeToXmlFile (prefix_file_name + ".flowmonitor", true, true);
+      monitor->SerializeToXmlFile (prefix_file_name + ".flowmonitor", true, true);
     }
 
   Simulator::Destroy ();
