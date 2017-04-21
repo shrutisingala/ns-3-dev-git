@@ -304,6 +304,5 @@ TcpNewRenoLSS::GetName () const
 {
   return "TcpNewRenoLSS";
 }
-  
-} // namespace ns3
 
+} // namespace ns3
