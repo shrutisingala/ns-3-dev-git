@@ -28,10 +28,9 @@
 
 using namespace ns3;
 
-static const uint8_t CHANNEL_NUMBER = 36;
+static const uint16_t CHANNEL_NUMBER = 36;
 static const uint32_t FREQUENCY = 5180; // MHz
-static const uint8_t CHANNEL_WIDTH = 20; // MHz
-static const uint8_t GUARD_WIDTH = 10; // MHz
+static const uint32_t CHANNEL_WIDTH = 20; // MHz
 
 /**
  * \ingroup wifi-test
@@ -115,7 +114,7 @@ SpectrumWifiPhyBasicTest::MakeSignal (double txPowerWatts)
   pkt->AddTrailer (trailer);
   WifiPhyTag tag (txVector, mpdutype);
   pkt->AddPacketTag (tag);
-  Ptr<SpectrumValue> txPowerSpectrum = WifiSpectrumValueHelper::CreateOfdmTxPowerSpectralDensity (FREQUENCY, CHANNEL_WIDTH, txPowerWatts, GUARD_WIDTH);
+  Ptr<SpectrumValue> txPowerSpectrum = WifiSpectrumValueHelper::CreateOfdmTxPowerSpectralDensity (FREQUENCY, CHANNEL_WIDTH, txPowerWatts);
   Ptr<WifiSpectrumSignalParameters> txParams = Create<WifiSpectrumSignalParameters> ();
   txParams->psd = txPowerSpectrum;
   txParams->txPhy = 0;

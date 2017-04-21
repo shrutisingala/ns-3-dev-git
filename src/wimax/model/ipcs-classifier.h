@@ -37,10 +37,6 @@ class SsServiceFlowManager;
 class IpcsClassifier : public Object
 {
 public:
-  /**
-   * \brief Get the type ID.
-   * \return the object TypeId
-   */
   static TypeId GetTypeId (void);
   IpcsClassifier (void);
   ~IpcsClassifier (void);

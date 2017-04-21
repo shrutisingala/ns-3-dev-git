@@ -30,11 +30,8 @@
 
 using namespace ns3;
 
-/**
- * \ingroup wimax-test
- * \ingroup tests
- *
- * \brief Test the wimax packet fragmentation.
+/*
+ * Test the wimax packet fragmentation.
  */
 class Ns3WimaxFragmentationTestCase : public TestCase
 {
@@ -141,13 +138,8 @@ Ns3WimaxFragmentationTestCase::DoRun (void)
   delete connectionRx;
   Simulator::Destroy ();
 }
+// ==============================================================================
 
-/**
- * \ingroup wimax-test
- * \ingroup tests
- *
- * \brief Ns3 Wimax Fragmentation Test Suite
- */
 class Ns3WimaxFragmentationTestSuite : public TestSuite
 {
 public:
@@ -160,4 +152,4 @@ Ns3WimaxFragmentationTestSuite::Ns3WimaxFragmentationTestSuite ()
   AddTestCase (new Ns3WimaxFragmentationTestCase, TestCase::QUICK);
 }
 
-static Ns3WimaxFragmentationTestSuite ns3WimaxFragmentationTestSuite; ///< the test suite
+static Ns3WimaxFragmentationTestSuite ns3WimaxFragmentationTestSuite;

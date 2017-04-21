@@ -45,20 +45,10 @@ class TypeId;
 class HigherLayerTxVectorTag : public Tag
 {
 public:
-  /**
-   * \brief Get the type ID.
-   * \return the object TypeId
-   */
   static TypeId GetTypeId (void);
   virtual TypeId GetInstanceTypeId (void) const;
 
   HigherLayerTxVectorTag (void);
-  /**
-   * Constructor
-   *
-   * \param txVector wifi transmit vector
-   * \param adaptable is adaptable?
-   */
   HigherLayerTxVectorTag (WifiTxVector txVector, bool adaptable);
   /**
    * \returns the tx vector for transmission
@@ -75,8 +65,8 @@ public:
   virtual void Print (std::ostream &os) const;
 
 private:
-  WifiTxVector m_txVector; ///< transmit vector
-  bool m_adaptable; ///< adaptable
+  WifiTxVector m_txVector;
+  bool m_adaptable;
 };
 
 } // namespace ns3

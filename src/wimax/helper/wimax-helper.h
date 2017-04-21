@@ -142,7 +142,6 @@ public:
    * \param type device type to create
    * \param phyType a phy to use
    * \param schedulerType the type of the scheduling algorithm to install
-   * \return NetDeviceContainer
    *
    * For each of the input nodes, a new WiMAX net device (either
    * ns3::SubscriberStationNetDevice or ns3::BaseStationNetDevice
@@ -156,7 +155,6 @@ public:
    * \param phyType PHY type to create.
    * \param channel A channel to use.
    * \param schedulerType The scheduling mechanism.
-   * \return NetDeviceContainer
    *
    * For each of the input nodes, a new WiMAX net device (either
    * ns3::SubscriberStationNetDevice or ns3::BaseStationNetDevice
@@ -173,7 +171,6 @@ public:
    * \param phyType PHY type to create.
    * \param schedulerType The scheduling mechanism.
    * \param frameDuration the farme duration in seconds
-   * \return NetDeviceContainer
    *
    * For each of the input nodes, a new WiMAX net device (either
    * ns3::SubscriberStationNetDevice or ns3::BaseStationNetDevice
@@ -225,7 +222,6 @@ public:
    * \param phyType PHY type to create.
    * \param channel A channel to use.
    * \param schedulerType The scheduling mechanism to install on the device.
-   * \return Ptr<WimaxNetDevice>
    *
    * For each of the input nodes, a new WiMAX net device (either
    * ns3::SubscriberStationNetDevice or ns3::BaseStationNetDevice
@@ -242,7 +238,6 @@ public:
    * \param direction the direction of the service flow: UP or DOWN.
    * \param schedulinType The service scheduling type to be used: UGS, RTPS, NRTPS, BE
    * \param classifier The classifier to be used for this service flow
-   * \return ServiceFlow
    *
    */
   ServiceFlow CreateServiceFlow (ServiceFlow::Direction direction,
@@ -278,21 +273,7 @@ public:
   int64_t AssignStreams (NetDeviceContainer c, int64_t stream);
 
 private:
-  /**
-   * ASCII trace receive event
-   * \param stream the output stream
-   * \param path the path name
-   * \param packet the packet
-   * \param source the source MAC address
-   */
   static void AsciiRxEvent (Ptr<OutputStreamWrapper> stream, std::string path, Ptr<const Packet> packet, const Mac48Address &source);
-  /**
-   * ASCII trace transmit event
-   * \param stream the output stream
-   * \param path the path
-   * \param packet the packet
-   * \param dest the destination MAC address
-   */
   static void AsciiTxEvent (Ptr<OutputStreamWrapper> stream, std::string path, Ptr<const Packet> packet, const Mac48Address &dest);
   /**
    * \brief Enable pcap output on the indicated net device.
@@ -323,7 +304,7 @@ private:
                                     Ptr<NetDevice> nd,
                                     bool explicitFilename);
 
-  Ptr<WimaxChannel> m_channel; ///< wifi channel
+  Ptr<WimaxChannel> m_channel;
 };
 
 } // namespace ns3

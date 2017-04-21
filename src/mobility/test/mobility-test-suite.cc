@@ -34,13 +34,8 @@
 
 using namespace ns3;
 
-/**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief Test whether course change notifications occur regardless of calls
- * to Update() position (which are triggered by calls to GetPosition())
- */
+// Test whether course change notifications occur regardless of calls
+// to Update() position (which are triggered by calls to GetPosition())
 class WaypointLazyNotifyFalse : public TestCase
 {
 public:
@@ -48,21 +43,12 @@ public:
   virtual ~WaypointLazyNotifyFalse ();
 
 private:
-  /**
-   * Test X position function
-   * \param expectedXPos the expected X position
-   */
   void TestXPosition (double expectedXPos);
-  /**
-   * Course change callback
-   * \param path the path
-   * \param model the mobility model
-   */
   void CourseChangeCallback (std::string path, Ptr<const MobilityModel> model);
   virtual void DoRun (void);
-  Ptr<Node> m_node; ///< mode
-  Ptr<WaypointMobilityModel> m_mob; ///< modility model
-  int m_courseChanges; ///< course changes
+  Ptr<Node> m_node;
+  Ptr<WaypointMobilityModel> m_mob;
+  int m_courseChanges;
 };
 
 WaypointLazyNotifyFalse::WaypointLazyNotifyFalse ()
@@ -109,12 +95,6 @@ WaypointLazyNotifyFalse::DoRun (void)
   Simulator::Destroy ();
 }
 
-/**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief Waypoint Lazy Notify True
- */
 class WaypointLazyNotifyTrue : public TestCase
 {
 public:
@@ -122,20 +102,11 @@ public:
   virtual ~WaypointLazyNotifyTrue ();
 
 private:
-  /**
-   * Text X position function
-   * \param expectedXPos the expected X position
-   */
   void TestXPosition (double expectedXPos);
-  /**
-   * Course change callback
-   * \param path the path
-   * \param model the mobility model
-   */
   void CourseChangeCallback (std::string path, Ptr<const MobilityModel> model);
   virtual void DoRun (void);
-  Ptr<Node> m_node; ///< node
-  Ptr<WaypointMobilityModel> m_mob; ///< modility model
+  Ptr<Node> m_node;
+  Ptr<WaypointMobilityModel> m_mob;
 };
 
 WaypointLazyNotifyTrue::WaypointLazyNotifyTrue ()
@@ -181,12 +152,6 @@ WaypointLazyNotifyTrue::DoRun (void)
   Simulator::Destroy ();
 }
 
-/**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief Waypoint Initial Position Is Waypoint Test
- */
 class WaypointInitialPositionIsWaypoint : public TestCase
 {
 public:
@@ -194,24 +159,14 @@ public:
   virtual ~WaypointInitialPositionIsWaypoint ();
 
 private:
-  /**
-   * Text X position function
-   * \param model the mobility model
-   * \param expectedXPos the expected X position
-   */
   void TestXPosition (Ptr<const WaypointMobilityModel> model, double expectedXPos);
-  /**
-   * Test number of way points
-   * \param model the mobility model
-   * \param num the number of way points
-   */
   void TestNumWaypoints (Ptr<const WaypointMobilityModel> model, uint32_t num);
   virtual void DoRun (void);
-  Ptr<WaypointMobilityModel> m_mob1; ///< mobility model 1
-  Ptr<WaypointMobilityModel> m_mob2; ///< mobility model 2
-  Ptr<WaypointMobilityModel> m_mob3; ///< mobility model 3
-  Ptr<WaypointMobilityModel> m_mob4; ///< mobility model 4
-  Ptr<WaypointMobilityModel> m_mob5; ///< mobility model 5
+  Ptr<WaypointMobilityModel> m_mob1;
+  Ptr<WaypointMobilityModel> m_mob2;
+  Ptr<WaypointMobilityModel> m_mob3;
+  Ptr<WaypointMobilityModel> m_mob4;
+  Ptr<WaypointMobilityModel> m_mob5;
 };
 
 WaypointInitialPositionIsWaypoint::WaypointInitialPositionIsWaypoint ()
@@ -321,12 +276,6 @@ WaypointInitialPositionIsWaypoint::DoRun (void)
   Simulator::Destroy ();
 }
 
-/**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief Waypoint Mobility Model Via Helper Test
- */
 class WaypointMobilityModelViaHelper : public TestCase
 {
 public:
@@ -334,11 +283,6 @@ public:
   virtual ~WaypointMobilityModelViaHelper ();
 
 private:
-  /**
-   * Text X position function
-   * \param mob the mobility model
-   * \param expectedXPos the expected X position
-   */
   void TestXPosition (Ptr<const WaypointMobilityModel> mob, double expectedXPos);
   virtual void DoRun (void);
 };
@@ -410,12 +354,6 @@ WaypointMobilityModelViaHelper::DoRun (void)
   Simulator::Destroy ();
 }
 
-/**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief Mobility Test Suite
- */
 class MobilityTestSuite : public TestSuite
 {
 public:
@@ -431,4 +369,4 @@ MobilityTestSuite::MobilityTestSuite ()
   AddTestCase (new WaypointMobilityModelViaHelper, TestCase::QUICK);
 }
 
-static MobilityTestSuite mobilityTestSuite; ///< the test suite
+static MobilityTestSuite mobilityTestSuite;

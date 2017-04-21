@@ -30,12 +30,10 @@ namespace ns3 {
 
 /**
  * \ingroup wimax
- * \brief CsParameters class
  */
 class CsParameters
 {
 public:
-  /// Action enumeration
   enum Action
   {
     ADD = 0,
@@ -54,7 +52,6 @@ public:
   CsParameters (enum Action classifierDscAction, IpcsClassifierRecord classifier);
   /**
    * \brief sets the dynamic service classifier action to ADD, Change or delete. Only ADD is supported
-   * \param action the action enumeration
    */
   void SetClassifierDscAction (enum Action action);
   /**
@@ -76,8 +73,8 @@ public:
   Tlv ToTlv (void) const;
 
 private:
-  enum Action m_classifierDscAction; ///< classifier DSC action
-  IpcsClassifierRecord m_packetClassifierRule; ///< packet classifier rule
+  enum Action m_classifierDscAction;
+  IpcsClassifierRecord m_packetClassifierRule;
 };
 
 }
