@@ -215,4 +215,94 @@ TcpNewReno::Fork ()
   return CopyObject<TcpNewReno> (this);
 }
 
+//RENOLSS
+
+NS_OBJECT_ENSURE_REGISTERED (TcpNewRenoLSS);
+
+TypeId
+TcpNewRenoLSS::GetTypeId (void)
+{
+  static TypeId tid = TypeId ("ns3::TcpNewRenoLSS")
+    .SetParent<TcpNewReno> ()
+    .SetGroupName ("Internet")
+    .AddConstructor<TcpNewRenoLSS> ()
+  ;
+  return tid;
+}
+
+TcpNewRenoLSS::TcpNewRenoLSS ()
+  : TcpNewReno (),
+  m_maxSsThresh (100.0)
+{
+  NS_LOG_FUNCTION (this);
+}
+
+TcpNewRenoLSS::TcpNewRenoLSS (const TcpNewRenoLSS &sock)
+  : TcpNewReno (sock),
+  m_maxSsThresh (sock.m_maxSsThresh)
+{
+  NS_LOG_FUNCTION (this);
+}
+
+TcpNewRenoLSS::~TcpNewRenoLSS ()
+{
+  NS_LOG_FUNCTION (this);
+}
+
+uint32_t
+TcpNewRenoLSS::SlowStart (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
+{
+  NS_LOG_FUNCTION (this << tcb << segmentsAcked);
+
+  NS_LOG_INFO ("maxSSThresh = " << m_maxSsThresh );
+
+  if (segmentsAcked >= 1)
+    {
+      int k;
+      k = (int)(tcb->m_cWnd/(double)(0.5*m_maxSsThresh*tcb->m_segmentSize));
+      NS_LOG_INFO ("k = " << k);
+      tcb->m_cWnd += (int)(tcb->m_segmentSize/k);
+      NS_LOG_INFO ("In LimitedSlowStart, updated to cwnd " << (int)(tcb->m_cWnd/tcb->m_segmentSize) << " ssthresh " << (int)(tcb->m_ssThresh/tcb->m_segmentSize));
+      return segmentsAcked - 1;
+    }
+
+  return 0;
+}
+
+void
+TcpNewRenoLSS::IncreaseWindow (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked)
+{
+  NS_LOG_FUNCTION (this << tcb << segmentsAcked);
+
+  if (((tcb->m_cWnd <= m_maxSsThresh*tcb->m_segmentSize) && (tcb->m_cWnd < tcb->m_ssThresh))|| ((tcb->m_ssThresh < m_maxSsThresh*tcb->m_segmentSize)&& (tcb->m_cWnd <= m_maxSsThresh*tcb->m_segmentSize ) && (tcb->m_cWnd < tcb->m_ssThresh)))
+    {
+      NS_LOG_INFO ("Entering Slow Start");
+      segmentsAcked = TcpNewReno::SlowStart (tcb, segmentsAcked);
+    }
+  else if (m_maxSsThresh*tcb->m_segmentSize < tcb->m_cWnd && tcb->m_cWnd < tcb->m_ssThresh)
+    {
+      NS_LOG_INFO ("Entering Limited Slow Start ");
+      segmentsAcked = TcpNewRenoLSS::SlowStart (tcb, segmentsAcked);
+    }
+
+  if (tcb->m_cWnd >= tcb->m_ssThresh)
+    {
+      TcpNewReno::CongestionAvoidance (tcb, segmentsAcked);
+    }
+
+  
+}
+
+Ptr<TcpCongestionOps>
+TcpNewRenoLSS::Fork ()
+{
+  return CopyObject<TcpNewRenoLSS> (this);
+}
+
+std::string
+TcpNewRenoLSS::GetName () const
+{
+  return "TcpNewRenoLSS";
+}
+
 } // namespace ns3
