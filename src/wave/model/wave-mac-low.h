@@ -45,10 +45,6 @@ class WaveNetDevice;
 class WaveMacLow : public MacLow
 {
 public:
-  /**
-   * \brief Get the type ID.
-   * \return the object TypeId
-   */
   static TypeId GetTypeId (void);
   WaveMacLow ();
   virtual ~WaveMacLow ();
@@ -83,8 +79,8 @@ private:
    */
   virtual WifiTxVector GetDataTxVector (Ptr<const Packet> packet, const WifiMacHeader *hdr) const;
 
-  Ptr<ChannelScheduler> m_scheduler; ///< the channel scheduler
-  Ptr<ChannelCoordinator> m_coordinator; ///< the channel coordinator
+  Ptr<ChannelScheduler> m_scheduler;
+  Ptr<ChannelCoordinator> m_coordinator;
 };
 
 } // namespace ns3

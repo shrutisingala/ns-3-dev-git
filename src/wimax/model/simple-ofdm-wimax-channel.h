@@ -37,7 +37,6 @@ class SimpleOfdmWimaxPhy;
 
 /**
  * \ingroup wimax
- * \brief SimpleOfdmWimaxChannel class 
  */
 class SimpleOfdmWimaxChannel : public WimaxChannel
 {
@@ -45,7 +44,6 @@ public:
   SimpleOfdmWimaxChannel (void);
   ~SimpleOfdmWimaxChannel (void);
 
-  /// PropModel enumeration
   enum PropModel
   {
     RANDOM_PROPAGATION,
@@ -101,30 +99,12 @@ public:
   int64_t AssignStreams (int64_t stream);
 
 private:
-  /**
-   * Attach functiion
-   * \param phy the phy layer
-   */
   void DoAttach (Ptr<WimaxPhy> phy);
-  std::list<Ptr<SimpleOfdmWimaxPhy> > m_phyList; ///< phy list
-  /**
-   * Get number of devices function
-   * \returns the number of devices
-   */
+  std::list<Ptr<SimpleOfdmWimaxPhy> > m_phyList;
   uint32_t DoGetNDevices (void) const;
-  /**
-   * End send dummy block function
-   * \param rxphy the Ptr<SimpleOfdmWimaxPhy>
-   * \param param the simpleOfdmSendParam *
-   */
   void EndSendDummyBlock  (Ptr<SimpleOfdmWimaxPhy> rxphy, simpleOfdmSendParam * param);
-  /**
-   * Get device function
-   * \param i the device index
-   * \returns the device
-   */
   Ptr<NetDevice> DoGetDevice (uint32_t i) const;
-  Ptr<PropagationLossModel> m_loss; ///< loss
+  Ptr<PropagationLossModel> m_loss;
 };
 
 } // namespace ns3

@@ -193,7 +193,38 @@ protected:
   virtual uint32_t SlowStart (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
   virtual void CongestionAvoidance (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
 };
+  
+class TcpNewRenoLSS : public TcpNewReno
+{
+public:
+  /**
+   * \brief Get the type ID.
+   * \return the object TypeId
+   */
+  static TypeId GetTypeId (void);
 
+  TcpNewRenoLSS ();
+
+  /**
+   * \brief Copy constructor.
+   * \param sock object to copy.
+   */
+
+  TcpNewRenoLSS (const TcpNewRenoLSS& sock);
+
+  ~TcpNewRenoLSS ();
+
+  std::string GetName () const;
+
+  virtual void IncreaseWindow (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
+  virtual Ptr<TcpCongestionOps> Fork ();
+
+protected:
+  virtual uint32_t SlowStart (Ptr<TcpSocketState> tcb, uint32_t segmentsAcked);
+
+private:
+  int m_maxSsThresh;
+};
 
 } // namespace ns3
 

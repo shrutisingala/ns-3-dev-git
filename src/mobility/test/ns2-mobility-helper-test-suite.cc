@@ -74,10 +74,7 @@ bool AreVectorsEqual (Vector const & actual, Vector const & limit, double tol)
 }
 
 /**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief Every test case is supposed to:
+ * Every test case is supposed to:
  *  1. Generate short mobility trace file
  *  2. Read it back using Ns2MobilityHelper
  *  3. Check initial node positions and speeds.
@@ -94,14 +91,6 @@ public:
     Vector pos;             ///< reference position
     Vector vel;             ///< reference velocity
 
-    /**
-     * Constructor
-     *
-     * \param id reference ID
-     * \param t time
-     * \param p position
-     * \param v velocity
-     */
     ReferencePoint (std::string const & id, Time t, Vector const & p, Vector const & v)
       : node (id),
         time (t),
@@ -266,12 +255,7 @@ private:
   }
 };
 
-/**
- * \ingroup mobility-test
- * \ingroup tests
- *
- * \brief The test suite
- */
+/// The test suite
 class Ns2MobilityHelperTestSuite : public TestSuite
 {
 public:
@@ -533,4 +517,4 @@ public:
     AddTestCase (t, TestCase::QUICK);
 
   }
-} g_ns2TransmobilityHelperTestSuite; ///< the test suite
+} g_ns2TransmobilityHelperTestSuite;

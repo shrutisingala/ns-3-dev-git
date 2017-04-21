@@ -27,10 +27,6 @@
 
 namespace ns3 {
 
-/**
- * \ingroup wave
- * \brief Nqos Wave Mac Helper class
- */
 class NqosWaveMacHelper : public WifiMacHelper
 {
 public:
@@ -47,7 +43,6 @@ public:
   /**
    * Create a mac helper in a default working state.
    * i.e., this is an ocb mac by default.
-   * \returns NqosWaveMacHelper
    */
   static NqosWaveMacHelper Default (void);
   /**
@@ -95,10 +90,6 @@ public:
                         std::string n10 = "", const AttributeValue &v10 = EmptyAttributeValue ());
 };
 
-/**
- * \ingroup wave
- * \brief Qos Wave Mac Helper class
- */
 class QosWaveMacHelper : public WifiMacHelper
 {
 public:
